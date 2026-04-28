@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>可可20岁生日副本</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <style>
+    :root {
+      --primary: #d6485d; /* mellow berry red */
+      --secondary: #f8e8e8; /* creamy white pink */
+      --accent: #f1c6c6; /* strawberry pink */
+      --gold: #e6c79c; /* champagne */
+      --text-dark: #3d3a3a;
+      --card-bg: rgba(255,255,255,0.6);
+      --blur: 10px;
+      --radius: 20px;
+    }
+    body {
+      margin: 0;
+      font-family: "Arial", sans-serif;
+      background: var(--secondary);
+      color: var(--text-dark);
+      overflow: hidden;
+    }
+    .section {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 1.5rem;
+      transition: transform 0.8s ease, opacity 0.8s ease;
+      opacity: 0;
+      transform: translateY(100%);
+    }
+    .section.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .hidden {
+      display: none;
+    }
+    h1, h2, h3, p {
+      margin: 0.5rem 0;
+    }
+    .btn {
+      margin-top: 1rem;
+      padding: 0.7rem 1.5rem;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 9999px;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+    .btn:hover {
+      box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+    }
+    /* scene 1 */
+    #scene1 {
+      background: linear-gradient(135deg, #941925, #f5a5a5);
+      color: #fff;
+      overflow: hidden;
+    }
+    #scene1 .title {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    #scene1 .subtitle {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+    }
+    /* simple floating icons for scene1 */
+    .float-icon {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      opacity: 0.7;
+      animation: float 6s linear infinite;
+    }
+    @keyframes float {
+      from { transform: translateY(0); }
+      to { transform: translateY(-100vh); }
+    }
+    /* scene2 card */
+    .card {
+      backdrop-filter: blur(var(--blur));
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      max-width: 95%;
+    }
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    .tag {
+      padding: 0.3rem 0.8rem;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      animation: bounce 0.6s ease forwards;
+      opacity: 0;
+    }
+    @keyframes bounce {
+      0% { transform: translateY(30px); opacity: 0; }
+      80% { transform: translateY(-10px); opacity: 1; }
+      100% { transform: translateY(0); }
+    }
+    /* scene3 photos */
+    .photo-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      align-items: center;
+      width: 100%;
+    }
+    .photo {
+      position: relative;
+      width: 80%;
+      max-width: 300px;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+      background: #fff;
+      animation: fadeIn 0.8s ease forwards;
+      opacity: 0;
+    }
+    .photo img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .caption {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background: rgba(0,0,0,0.5);
+      color: #fff;
+      padding: 0.4rem;
+      font-size: 0.8rem;
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* scene4 generator */
+    .generator {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #wishDisplay {
+      margin-top: 1rem;
+      font-size: 1.1rem;
+      min-height: 2rem;
+      color: var(--primary);
+    }
+    /* small explosion effect for generator */
+    .particle {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: explode 0.8s forwards;
+    }
+    @keyframes explode {
+      from { opacity: 1; transform: translate(0,0) scale(1); }
+      to { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.5); }
+    }
+    /* scene5 lines fade in */
+    .lines {
+      max-width: 90%;
+      text-align: left;
+      margin: 0 auto;
+    }
+    .line {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: appear 0.8s forwards;
+    }
+    @keyframes appear {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* scene6 overlay */
+    #finalPopup {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+    #finalPopup .popup-content {
+      backdrop-filter: blur(var(--blur));
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: var(--radius);
+      text-align: center;
+      max-width: 90%;
+      color: var(--text-dark);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    #finalPopup.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    /* audio control */
+    #audioControl {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: rgba(0,0,0,0.5);
+      color: #fff;
+      padding: 0.4rem 0.8rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      z-index: 100;
+    }
+  </style>
+</head>
+<body>
+  <!-- BGM -->
+  <audio id="bgm" src="music.mp3" loop></audio>
+  <div id="audioControl">开启 BGM</div>
+  
+  <!-- Scene 1 -->
+  <section class="section" id="scene1">
+    <div class="title">检测到今日特殊事件……</div>
+    <div class="subtitle">可可限定生日副本已开启</div>
+    <button class="btn" id="startBtn">点击进入 20 岁现场</button>
+    <!-- floating icons -->
+    <div class="float-icon" style="top:80%; left:10%; animation-duration: 8s; animation-delay: 0s;">
+      <img src="photo1.jpg" alt="" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+    </div>
+    <div class="float-icon" style="top:90%; left:70%; animation-duration: 7s; animation-delay: 1s;">
+      <img src="photo2.jpg" alt="" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+    </div>
+    <div class="float-icon" style="top:95%; left:40%; animation-duration: 9s; animation-delay: 2s;">
+      <img src="photo3.jpg" alt="" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+    </div>
+  </section>
+  
+  <!-- Scene 2 -->
+  <section class="section" id="scene2">
+    <div class="card">
+      <h2>可可 20 岁限定档案</h2>
+      <p><strong>姓名：</strong>可可</p>
+      <p><strong>称呼：</strong>小姐</p>
+      <p><strong>今日身份：</strong>20岁限定寿星</p>
+      <p><strong>核心标签：</strong></p>
+      <div class="tags">
+        <div class="tag" style="animation-delay:0.2s;">甜妹</div>
+        <div class="tag" style="animation-delay:0.4s;">猫猫爱好者</div>
+        <div class="tag" style="animation-delay:0.6s;">草莓收藏家</div>
+        <div class="tag" style="animation-delay:0.8s;">小红书冲浪选手</div>
+        <div class="tag" style="animation-delay:1.0s;">偶尔峡谷上号</div>
+        <div class="tag" style="animation-delay:1.2s;">工作中也要漂亮</div>
+      </div>
+      <p style="margin-top:1rem;"><strong>口头禅：</strong>哎呦妈呀</p>
+      <p><strong>今日状态：</strong>生日 buff 已加载</p>
+    </div>
+    <button class="btn" id="next2">下一页</button>
+  </section>
+  
+  <!-- Scene 3 -->
+  <section class="section" id="scene3">
+    <h2>今日份可可 · Birthday Note</h2>
+    <div class="photo-container">
+      <div class="photo" style="animation-delay:0.2s;">
+        <img src="photo1.jpg" alt="第一张照片">
+        <div class="caption">笑起来的时候，今天的好运都应该多给你一点。</div>
+      </div>
+      <div class="photo" style="animation-delay:0.5s;">
+        <img src="photo2.jpg" alt="第二张照片">
+        <div class="caption">可可发射甜妹光波，命中率 100%。</div>
+      </div>
+      <div class="photo" style="animation-delay:0.8s;">
+        <img src="photo3.jpg" alt="第三张照片">
+        <div class="caption">高级感不是装出来的，是可可今天自带的生日滤镜。</div>
+      </div>
+    </div>
+    <button class="btn" id="next3">下一页</button>
+  </section>
+  
+  <!-- Scene 4 -->
+  <section class="section" id="scene4">
+    <h2>20岁愿望自动生成器</h2>
+    <div class="generator">
+      <button class="btn" id="generateWish">点击生成今日幸运祝福</button>
+      <div id="wishDisplay"></div>
+    </div>
+    <button class="btn" id="next4" style="margin-top:2rem;">下一页</button>
+  </section>
+  
+  <!-- Scene 5 -->
+  <section class="section" id="scene5">
+    <h2>20岁限定祝福</h2>
+    <div class="lines" id="blessLines">
+      <p class="line" style="animation-delay:0.2s;">20岁不是突然变成大人，</p>
+      <p class="line" style="animation-delay:0.6s;">只是多了一个可以更自由选择自己的年纪。</p>
+      <p class="line" style="animation-delay:1.0s;">愿可可在新的这一岁，</p>
+      <p class="line" style="animation-delay:1.4s;">工作少一点疲惫，生活多一点惊喜；</p>
+      <p class="line" style="animation-delay:1.8s;">猫猫、草莓、漂亮照片和好心情，</p>
+      <p class="line" style="animation-delay:2.2s;">都能经常出现在你的日常里。</p>
+      <p class="line" style="animation-delay:2.6s;">今天不用太懂事，</p>
+      <p class="line" style="animation-delay:3.0s;">今天你最大。</p>
+    </div>
+    <button class="btn" id="next5" style="margin-top:2rem;">下一页</button>
+  </section>
+  
+  <!-- Scene 6 -->
+  <section class="section" id="scene6">
+    <h2>小姐，20岁生日快乐。</h2>
+    <h3>可可限定版 2.0 已正式上线。</h3>
+    <p style="margin:1rem 0;">愿你漂亮、开心、清醒、自由，<br>也愿你每天都有一点点被生活偏爱的证据。</p>
+    <button class="btn" id="finalBtn">收下今天的生日 buff</button>
+  </section>
+  
+  <!-- Final popup -->
+  <div id="finalPopup">
+    <div class="popup-content">
+      <h2>哎呦妈呀</h2>
+      <p>祝福已成功送达！</p>
+      <button class="btn" id="closePopup">关闭</button>
+    </div>
+  </div>
+  
+  <script>
+    // Section navigation
+    const sections = ["scene1","scene2","scene3","scene4","scene5","scene6"];
+    let current = 0;
+    function showSection(index) {
+      sections.forEach((id,i) => {
+        const el = document.getElementById(id);
+        if(i === index) {
+          el.classList.add("active");
+        } else {
+          el.classList.remove("active");
+        }
+      });
+    }
+    document.getElementById("startBtn").addEventListener("click", () => {
+      current = 1;
+      showSection(current);
+      // play audio after user interaction
+      const audio = document.getElementById("bgm");
+      if(audio.paused) {
+        audio.play();
+        document.getElementById("audioControl").textContent = "BGM 播放中";
+      }
+    });
+    document.getElementById("next2").addEventListener("click", () => {
+      current = 2; showSection(current);
+    });
+    document.getElementById("next3").addEventListener("click", () => {
+      current = 3; showSection(current);
+    });
+    document.getElementById("next4").addEventListener("click", () => {
+      current = 4; showSection(current);
+    });
+    document.getElementById("next5").addEventListener("click", () => {
+      current = 5; showSection(current);
+    });
+    document.getElementById("finalBtn").addEventListener("click", () => {
+      document.getElementById("finalPopup").classList.add("show");
+    });
+    document.getElementById("closePopup").addEventListener("click", () => {
+      document.getElementById("finalPopup").classList.remove("show");
+    });
+    // audio control
+    document.getElementById("audioControl").addEventListener("click", () => {
+      const audio = document.getElementById("bgm");
+      if(audio.paused) {
+        audio.play();
+        document.getElementById("audioControl").textContent = "BGM 播放中";
+      } else {
+        audio.pause();
+        document.getElementById("audioControl").textContent = "开启 BGM";
+      }
+    });
+    // Wish generator
+    const wishes = [
+      "猫猫主动贴贴概率 +20%",
+      "草莓自由指数 +100%",
+      "小红书出片率 +99%",
+      "王者排位队友正常率 +50%",
+      "工作摸鱼成功率 +30%",
+      "帅哥刷新概率：正在努力加载中",
+      "今天所有烦人的事自动静音",
+      "哎呦妈呀，好运真的来了"
+    ];
+    const wishBtn = document.getElementById("generateWish");
+    const wishDisplay = document.getElementById("wishDisplay");
+    wishBtn.addEventListener("click", (e) => {
+      // random wish
+      const idx = Math.floor(Math.random() * wishes.length);
+      wishDisplay.textContent = wishes[idx];
+      // create particles
+      for(let i=0; i<15; i++) {
+        const p = document.createElement("div");
+        p.className = "particle";
+        const angle = Math.random() * 2 * Math.PI;
+        const dist = Math.random() * 100 + 30;
+        p.style.setProperty('--dx', (Math.cos(angle)*dist)+'px');
+        p.style.setProperty('--dy', (Math.sin(angle)*dist)+'px');
+        p.style.left = (e.clientX - 4)+"px";
+        p.style.top = (e.clientY - 4)+"px";
+        p.style.background = Math.random() > 0.5 ? "var(--primary)" : "var(--accent)";
+        document.body.appendChild(p);
+        setTimeout(() => {
+          p.remove();
+        }, 800);
+      }
+    });
+    // show initial scene
+    showSection(0);
+  </script>
+</body>
+</html>
