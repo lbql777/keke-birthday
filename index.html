@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#8f1027">
+  <link rel="icon" href="data:,">
+  <title>可可 20 岁生日快乐</title>
+  <style>
+    :root {
+      --berry-950: #3b0712;
+      --berry-900: #651020;
+      --berry-800: #8f1027;
+      --berry-700: #b81f38;
+      --berry-500: #db4960;
+      --berry-200: #ffd4dc;
+      --rose-100: #fff0f1;
+      --cream: #fff9f2;
+      --cream-deep: #fbe7dc;
+      --gold: #e7bd72;
+      --gold-soft: #fff0c9;
+      --ink: #3b2323;
+      --muted: #8d6661;
+      --card: rgba(255, 250, 246, 0.82);
+      --line: rgba(255, 255, 255, 0.54);
+      --shadow: 0 24px 60px rgba(91, 10, 27, 0.18);
+      --ease: cubic-bezier(.2, .8, .2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255, 211, 216, .65), transparent 28rem),
+        linear-gradient(135deg, #3b0712 0%, #801429 48%, #f8c8c6 100%);
+      color: var(--ink);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      letter-spacing: 0;
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    .phone-shell {
+      position: relative;
+      width: min(100vw, 430px);
+      height: 100svh;
+      min-height: 620px;
+      margin: 0 auto;
+      overflow: hidden;
+      background: var(--cream);
+      box-shadow: 0 0 80px rgba(22, 0, 8, .34);
+      isolation: isolate;
+    }
+
+    .phone-shell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(circle at 16% 14%, rgba(255, 224, 195, .72), transparent 8rem),
+        radial-gradient(circle at 85% 22%, rgba(255, 178, 194, .48), transparent 9rem),
+        radial-gradient(circle at 36% 88%, rgba(231, 189, 114, .34), transparent 10rem);
+      pointer-events: none;
+    }
+
+    .deck {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .scene {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: max(22px, env(safe-area-inset-top)) 22px max(22px, env(safe-area-inset-bottom));
+      opacity: 0;
+      transform: translate3d(0, 8%, 0) scale(.98);
+      pointer-events: none;
+      transition: opacity .64s var(--ease), transform .64s var(--ease);
+      overflow: hidden;
+    }
+
+    .scene.active {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+      pointer-events: auto;
+    }
+
+    .scene.exit-up {
+      transform: translate3d(0, -8%, 0) scale(.985);
+    }
+
+    .scene::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, .045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, .035) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
+      pointer-events: none;
+    }
+
+    .scene-inner {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 386px;
+    }
+
+    .glass {
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, .72);
+      border-radius: 28px;
+      background: var(--card);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .tiny {
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 28px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .62);
+      color: var(--berry-700);
+      font-size: 12px;
+      font-weight: 700;
+      box-shadow: inset 0 0 0 1px rgba(184, 31, 56, .08);
+    }
+
+    .title {
+      margin: 14px 0 0;
+      color: var(--berry-900);
+      font-size: clamp(26px, 7vw, 34px);
+      line-height: 1.1;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 14px 0 0;
+      color: #6f3a37;
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    .primary-btn,
+    .ghost-btn,
+    .music-btn {
+      border: 0;
+      border-radius: 999px;
+      cursor: pointer;
+      user-select: none;
+      transition: transform .16s ease, box-shadow .16s ease, opacity .16s ease;
+    }
+
+    .primary-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      width: 100%;
+      min-height: 52px;
+      padding: 14px 20px;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, .18), transparent),
+        linear-gradient(135deg, #fff8ed 0%, #ffd9dc 48%, #e8bc72 100%);
+      color: var(--berry-900);
+      font-size: 16px;
+      font-weight: 900;
+      box-shadow: 0 18px 34px rgba(80, 7, 21, .22);
+    }
+
+    .primary-btn:active,
+    .ghost-btn:active,
+    .music-btn:active {
+      transform: scale(.97);
+    }
+
+    .ghost-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 11px 18px;
+      background: rgba(255, 255, 255, .62);
+      color: var(--berry-800);
+      font-size: 13px;
+      font-weight: 800;
+      border: 1px solid rgba(184, 31, 56, .12);
+      box-shadow: 0 10px 20px rgba(91, 10, 27, .08);
+    }
+
+    .music-btn {
+      position: fixed;
+      top: max(14px, env(safe-area-inset-top));
+      right: calc(50% - min(50vw, 215px) + 14px);
+      z-index: 20;
+      min-height: 36px;
+      padding: 8px 12px;
+      background: rgba(255, 250, 246, .78);
+      color: var(--berry-800);
+      border: 1px solid rgba(255, 255, 255, .7);
+      box-shadow: 0 12px 28px rgba(91, 10, 27, .12);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .progress {
+      position: fixed;
+      left: 50%;
+      bottom: max(12px, env(safe-area-inset-bottom));
+      z-index: 20;
+      display: flex;
+      gap: 6px;
+      transform: translateX(-50%);
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(255, 250, 246, .58);
+      border: 1px solid rgba(255, 255, 255, .65);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(116, 42, 47, .28);
+      transition: width .24s var(--ease), background .24s var(--ease);
+    }
+
+    .dot.active {
+      width: 18px;
+      background: var(--berry-700);
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 58px;
+      z-index: 40;
+      width: max-content;
+      max-width: min(330px, calc(100vw - 42px));
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(58, 7, 18, .86);
+      color: #fff7ef;
+      box-shadow: 0 16px 32px rgba(0, 0, 0, .18);
+      font-size: 13px;
+      opacity: 0;
+      transform: translate(-50%, 12px);
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .sticker {
+      position: absolute;
+      z-index: 1;
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, .46);
+      border: 1px solid rgba(255, 255, 255, .58);
+      box-shadow: 0 18px 34px rgba(91, 10, 27, .12);
+      font-size: 22px;
+      animation: floaty 5.2s ease-in-out infinite;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    @keyframes floaty {
+      0%, 100% { transform: translate3d(0, 0, 0) rotate(-3deg); }
+      50% { transform: translate3d(0, -14px, 0) rotate(4deg); }
+    }
+
+    .scene-1 {
+      color: #fff8ef;
+      background:
+        radial-gradient(circle at 30% 16%, rgba(255, 212, 220, .32), transparent 9rem),
+        radial-gradient(circle at 90% 78%, rgba(231, 189, 114, .28), transparent 8rem),
+        linear-gradient(155deg, #410612 0%, #7d1023 42%, #cf3046 100%);
+    }
+
+    .sparkle-field {
+      position: absolute;
+      inset: -20%;
+      opacity: .72;
+      background-image:
+        radial-gradient(circle, rgba(255, 242, 213, .96) 0 1px, transparent 1.5px),
+        radial-gradient(circle, rgba(255, 210, 219, .82) 0 1px, transparent 1.5px);
+      background-size: 48px 48px, 76px 76px;
+      animation: shimmer 9s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes shimmer {
+      from { transform: translate3d(0, 0, 0); }
+      to { transform: translate3d(-48px, -76px, 0); }
+    }
+
+    .system-card {
+      padding: 28px 24px 24px;
+      border-radius: 32px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, .18), rgba(255, 255, 255, .07)),
+        rgba(255, 255, 255, .08);
+      border: 1px solid rgba(255, 255, 255, .28);
+      box-shadow: 0 28px 70px rgba(0, 0, 0, .22);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      text-align: center;
+    }
+
+    .system-line {
+      display: grid;
+      grid-template-columns: 10px 1fr;
+      gap: 9px;
+      align-items: center;
+      margin: 0 auto 18px;
+      width: max-content;
+      max-width: 100%;
+      color: rgba(255, 249, 242, .78);
+      font-size: 13px;
+      font-weight: 720;
+    }
+
+    .blink {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: #ffe4a7;
+      box-shadow: 0 0 18px rgba(255, 228, 167, .9);
+      animation: blink 1.2s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+      50% { opacity: .35; transform: scale(.72); }
+    }
+
+    .hero-title {
+      margin: 0;
+      font-size: clamp(34px, 10vw, 48px);
+      line-height: 1.04;
+      font-weight: 950;
+      color: #fff8ef;
+      text-shadow: 0 16px 34px rgba(0, 0, 0, .22);
+    }
+
+    .hero-title span {
+      display: block;
+      margin-top: 8px;
+      color: #ffe2b1;
+      font-size: .62em;
+      font-weight: 850;
+    }
+
+    .system-copy {
+      margin: 20px 0 24px;
+      color: rgba(255, 249, 242, .82);
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    .cat-ear {
+      position: relative;
+    }
+
+    .cat-ear::before,
+    .cat-ear::after {
+      content: "";
+      position: absolute;
+      top: -22px;
+      width: 30px;
+      height: 34px;
+      border-radius: 8px 22px 10px 22px;
+      background: rgba(255, 249, 242, .72);
+      transform: rotate(30deg);
+    }
+
+    .cat-ear::before { left: 28px; }
+    .cat-ear::after { right: 28px; transform: rotate(60deg); }
+
+    .profile-card {
+      padding: 24px;
+    }
+
+    .profile-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .profile-badge {
+      display: grid;
+      place-items: center;
+      width: 58px;
+      height: 58px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #fff, #ffe0e4);
+      color: var(--berry-800);
+      box-shadow: inset 0 0 0 1px rgba(184, 31, 56, .09), 0 12px 24px rgba(184, 31, 56, .12);
+      font-size: 26px;
+    }
+
+    .profile-grid {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+    }
+
+    .profile-row {
+      display: grid;
+      grid-template-columns: 82px 1fr;
+      gap: 8px;
+      min-height: 34px;
+      align-items: start;
+      padding: 9px 10px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, .48);
+      border: 1px solid rgba(184, 31, 56, .06);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .profile-row dt {
+      color: var(--berry-700);
+      font-weight: 850;
+    }
+
+    .profile-row dd {
+      margin: 0;
+      color: #583935;
+      font-weight: 650;
+    }
+
+    .profile-title {
+      font-size: clamp(30px, 8vw, 39px);
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .tag {
+      min-height: 30px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, .84), rgba(255, 212, 220, .76));
+      color: var(--berry-800);
+      border: 1px solid rgba(184, 31, 56, .08);
+      font-size: 12px;
+      font-weight: 800;
+      opacity: 0;
+      transform: translateY(12px) scale(.86);
+    }
+
+    .scene.active .tag {
+      animation: tagIn .54s var(--ease) forwards;
+    }
+
+    .scene.active .tag:nth-child(2) { animation-delay: .08s; }
+    .scene.active .tag:nth-child(3) { animation-delay: .16s; }
+    .scene.active .tag:nth-child(4) { animation-delay: .24s; }
+    .scene.active .tag:nth-child(5) { animation-delay: .32s; }
+    .scene.active .tag:nth-child(6) { animation-delay: .4s; }
+
+    @keyframes tagIn {
+      70% { transform: translateY(-3px) scale(1.03); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .scene-3 {
+      background:
+        radial-gradient(circle at 40% 18%, rgba(255, 255, 255, .8), transparent 8rem),
+        linear-gradient(180deg, #fff4f3 0%, #ffdce3 100%);
+    }
+
+    .note-title {
+      position: absolute;
+      top: max(54px, calc(env(safe-area-inset-top) + 48px));
+      left: 50%;
+      z-index: 3;
+      width: min(360px, calc(100% - 42px));
+      transform: translateX(-50%);
+      text-align: center;
+    }
+
+    .note-title h2 {
+      margin: 8px 0 4px;
+      color: var(--berry-800);
+      font-size: 21px;
+      line-height: 1.25;
+    }
+
+    .photo-wall {
+      position: relative;
+      width: 100%;
+      height: min(590px, calc(100svh - 142px));
+      min-height: 500px;
+      margin-top: 76px;
+    }
+
+    .photo-card {
+      position: absolute;
+      left: 50%;
+      width: min(220px, 60vw);
+      padding: 8px 8px 12px;
+      border-radius: 18px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, .94), rgba(255, 250, 246, .9));
+      box-shadow: 0 22px 42px rgba(82, 12, 25, .18);
+      border: 1px solid rgba(255, 255, 255, .86);
+      opacity: 0;
+      transform-origin: center;
+      transition: transform .78s var(--ease), opacity .78s var(--ease);
+    }
+
+    .scene.active .photo-card {
+      opacity: 1;
+    }
+
+    .photo-card:nth-child(1) {
+      top: 0;
+      z-index: 1;
+      transform: translate(-52%, 42px) rotate(-7deg) scale(.88);
+    }
+
+    .photo-card:nth-child(2) {
+      top: 174px;
+      z-index: 2;
+      transform: translate(-48%, 42px) rotate(6deg) scale(.9);
+      transition-delay: .12s;
+    }
+
+    .photo-card:nth-child(3) {
+      top: 352px;
+      z-index: 3;
+      transform: translate(-50%, 42px) rotate(-3deg) scale(.91);
+      transition-delay: .24s;
+    }
+
+    .scene.active .photo-card:nth-child(1) {
+      transform: translate(-56%, 0) rotate(-6deg) scale(.91);
+    }
+
+    .scene.active .photo-card:nth-child(2) {
+      transform: translate(-45%, 0) rotate(5deg) scale(.96);
+    }
+
+    .scene.active .photo-card:nth-child(3) {
+      transform: translate(-52%, 0) rotate(-2deg) scale(1);
+    }
+
+    .photo-media {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 100%;
+      height: 132px;
+      overflow: hidden;
+      border-radius: 13px;
+      background: #ffe9df;
+    }
+
+    .photo-media::before {
+      content: "";
+      position: absolute;
+      inset: -18px;
+      background-image: var(--photo);
+      background-size: cover;
+      background-position: center;
+      filter: blur(18px) saturate(1.05) brightness(1.08);
+      opacity: .58;
+      transform: scale(1.08);
+    }
+
+    .photo-media::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, .08), rgba(255, 204, 213, .14)),
+        radial-gradient(circle at 50% 20%, rgba(255, 255, 255, .26), transparent 55%);
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    .photo-media img {
+      position: relative;
+      z-index: 1;
+      width: auto;
+      max-width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: brightness(1.045) saturate(1.05) contrast(.96);
+    }
+
+    .photo-card p {
+      margin: 9px 4px 0;
+      color: #563431;
+      font-size: 11px;
+      line-height: 1.36;
+      text-align: center;
+      font-weight: 760;
+    }
+
+    .photo-fallback {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      display: none;
+      place-items: center;
+      padding: 20px;
+      text-align: center;
+      color: var(--berry-800);
+      background:
+        radial-gradient(circle at 50% 30%, rgba(255,255,255,.8), transparent 8rem),
+        linear-gradient(135deg, #fff7ef, #ffd6dc);
+      font-size: 14px;
+      font-weight: 850;
+      line-height: 1.6;
+    }
+
+    .photo-media.is-missing img {
+      display: none;
+    }
+
+    .photo-media.is-missing .photo-fallback {
+      display: grid;
+    }
+
+    .wish-card {
+      padding: 30px 24px 24px;
+      text-align: center;
+    }
+
+    .wish-display {
+      display: grid;
+      place-items: center;
+      min-height: 150px;
+      margin: 18px 0 24px;
+      padding: 18px;
+      border-radius: 24px;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.68), rgba(255,228,232,.52));
+      border: 1px solid rgba(184, 31, 56, .08);
+      color: var(--berry-800);
+      font-size: 23px;
+      line-height: 1.45;
+      font-weight: 950;
+    }
+
+    .wish-display.bump {
+      animation: wishBump .34s var(--ease);
+    }
+
+    @keyframes wishBump {
+      50% { transform: translateY(-4px) scale(1.025); }
+    }
+
+    .particle {
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 38;
+      width: 24px;
+      height: 24px;
+      display: grid;
+      place-items: center;
+      pointer-events: none;
+      font-size: 22px;
+      animation: burst .82s var(--ease) forwards;
+      will-change: transform, opacity;
+    }
+
+    @keyframes burst {
+      from { opacity: 1; transform: translate3d(0, 0, 0) scale(.7) rotate(0deg); }
+      to { opacity: 0; transform: translate3d(var(--dx), var(--dy), 0) scale(1.12) rotate(var(--rot)); }
+    }
+
+    .blessing-card {
+      padding: 32px 24px;
+      text-align: center;
+      background:
+        radial-gradient(circle at 50% -20%, rgba(255, 232, 198, .8), transparent 10rem),
+        rgba(255, 250, 246, .8);
+    }
+
+    .blessing-lines {
+      margin-top: 22px;
+      color: #4f312e;
+      font-size: 16px;
+      line-height: 2.08;
+      font-weight: 640;
+    }
+
+    .blessing-lines p {
+      margin: 0 0 14px;
+      opacity: 0;
+      transform: translateY(14px);
+    }
+
+    .scene.active .blessing-lines p {
+      animation: lineIn .72s var(--ease) forwards;
+    }
+
+    .scene.active .blessing-lines p:nth-child(2) { animation-delay: .18s; }
+    .scene.active .blessing-lines p:nth-child(3) { animation-delay: .36s; }
+    .scene.active .blessing-lines p:nth-child(4) { animation-delay: .54s; }
+    .scene.active .blessing-lines p:nth-child(5) { animation-delay: .72s; color: var(--berry-800); font-weight: 900; }
+
+    @keyframes lineIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .final-card {
+      padding: 34px 24px 24px;
+      text-align: center;
+    }
+
+    .final-title {
+      margin: 0;
+      color: var(--berry-900);
+      font-size: clamp(30px, 8vw, 40px);
+      line-height: 1.15;
+      font-weight: 950;
+    }
+
+    .final-sub {
+      margin: 14px 0 26px;
+      color: var(--berry-700);
+      font-size: 15px;
+      font-weight: 850;
+    }
+
+    .final-copy {
+      margin: 0 0 30px;
+      color: #5b3a36;
+      font-size: 15px;
+      line-height: 2;
+      font-weight: 620;
+    }
+
+    .next-row {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .scene-3 .next-row {
+      position: absolute;
+      left: 50%;
+      bottom: 48px;
+      z-index: 5;
+      transform: translateX(-50%);
+      margin: 0;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: rgba(38, 3, 13, .54);
+      opacity: 0;
+      pointer-events: none;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: opacity .24s ease;
+    }
+
+    .modal.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-box {
+      width: min(320px, 100%);
+      padding: 30px 24px 22px;
+      text-align: center;
+      border-radius: 30px;
+      background:
+        radial-gradient(circle at 50% -20%, rgba(255, 225, 171, .9), transparent 9rem),
+        linear-gradient(180deg, #fffaf4, #ffe1e7);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, .22);
+      transform: translateY(12px) scale(.92);
+      transition: transform .3s var(--ease);
+    }
+
+    .modal.show .modal-box {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-box h2 {
+      margin: 0 0 10px;
+      color: var(--berry-900);
+      font-size: 25px;
+    }
+
+    .modal-box p {
+      margin: 0 0 22px;
+      color: #63413d;
+      font-size: 15px;
+      line-height: 1.7;
+      font-weight: 700;
+    }
+
+    @media (max-height: 690px) {
+      .phone-shell { min-height: 100svh; }
+      .title { font-size: 25px; }
+      .photo-wall { min-height: 462px; margin-top: 64px; transform: scale(.94); transform-origin: center top; }
+      .note-title { top: 46px; }
+      .photo-media { height: 122px; }
+      .photo-card:nth-child(2) { top: 188px; }
+      .photo-card:nth-child(3) { top: 314px; }
+      .blessing-lines { font-size: 15px; line-height: 1.92; }
+      .blessing-lines p { margin-bottom: 10px; }
+    }
+
+    @media (min-width: 720px) {
+      .phone-shell {
+        margin-top: 0;
+        border-left: 1px solid rgba(255,255,255,.16);
+        border-right: 1px solid rgba(255,255,255,.16);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="phone-shell" aria-label="可可 20 岁生日 H5">
+    <audio id="bgm" src="music.mp3" preload="auto" loop></audio>
+    <button id="musicBtn" class="music-btn" type="button" aria-label="播放或暂停背景音乐">BGM 未播放</button>
+
+    <div class="deck" id="deck">
+      <section class="scene scene-1 active" data-scene="0">
+        <div class="sparkle-field"></div>
+        <div class="sticker" style="left: 24px; top: 88px;">🍓</div>
+        <div class="sticker" style="right: 28px; top: 146px; animation-delay: -.8s;">🐾</div>
+        <div class="sticker" style="left: 40px; bottom: 118px; animation-delay: -1.3s;">✨</div>
+        <div class="sticker" style="right: 34px; bottom: 96px; animation-delay: -2.1s;">🎁</div>
+
+        <div class="scene-inner">
+          <div class="system-card cat-ear">
+            <div class="system-line"><span class="blink"></span><span>系统提示 · 正在检测今日特殊事件</span></div>
+            <h1 class="hero-title">可可限定<br>生日副本<span>20 岁特别篇已开启</span></h1>
+            <p class="system-copy">本副本含猫猫、草莓、漂亮照片、好运 buff，以及少量“哎呦妈呀”能量。</p>
+            <button class="primary-btn" type="button" data-next>
+              <span>点击进入 20 岁现场</span><span aria-hidden="true">🐾</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="scene scene-2" data-scene="1">
+        <div class="sticker" style="right: 26px; top: 86px;">🐱</div>
+        <div class="sticker" style="left: 26px; bottom: 92px; animation-delay: -1.4s;">🍓</div>
+        <div class="scene-inner">
+          <article class="glass profile-card">
+            <div class="profile-head">
+              <div>
+                <span class="eyebrow">XHS NOTE · 生日档案</span>
+                <h2 class="title profile-title">可可 20 岁<br>限定档案</h2>
+              </div>
+              <div class="profile-badge">20</div>
+            </div>
+
+            <dl class="profile-grid">
+              <div class="profile-row"><dt>姓名</dt><dd>可可</dd></div>
+              <div class="profile-row"><dt>称呼</dt><dd>小姐</dd></div>
+              <div class="profile-row"><dt>今日身份</dt><dd>20岁限定寿星</dd></div>
+              <div class="profile-row"><dt>家族席位</dt><dd>姐姐位，气场自动加一格</dd></div>
+              <div class="profile-row"><dt>口头禅</dt><dd>哎呦妈呀</dd></div>
+              <div class="profile-row"><dt>今日状态</dt><dd>生日 buff 已加载</dd></div>
+            </dl>
+
+            <div class="tags" aria-label="核心标签">
+              <span class="tag">甜妹</span>
+              <span class="tag">猫猫爱好者</span>
+              <span class="tag">草莓收藏家</span>
+              <span class="tag">小红书冲浪选手</span>
+              <span class="tag">偶尔峡谷上号</span>
+              <span class="tag">工作中也要漂亮</span>
+            </div>
+          </article>
+          <div class="next-row"><button class="ghost-btn" type="button" data-next>打开生日笔记 ✨</button></div>
+        </div>
+      </section>
+
+      <section class="scene scene-3" data-scene="2">
+        <div class="note-title">
+          <span class="eyebrow">Birthday Note · 今日份可可</span>
+          <h2>照片不是证件照，是好运实拍</h2>
+        </div>
+        <div class="scene-inner">
+          <div class="photo-wall" aria-label="可可生日照片墙">
+            <article class="photo-card">
+              <div class="photo-media" style="--photo: url('photo1.jpg')">
+                <img src="photo1.jpg" alt="可可照片一">
+                <div class="photo-fallback">照片正在补妆中<br>photo1.jpg</div>
+              </div>
+              <p>笑起来的时候，今天的好运都应该多给你一点。</p>
+            </article>
+
+            <article class="photo-card">
+              <div class="photo-media" style="--photo: url('photo2.jpg')">
+                <img src="photo2.jpg" alt="可可照片二">
+                <div class="photo-fallback">甜妹光波加载中<br>photo2.jpg</div>
+              </div>
+              <p>可可发射甜妹光波，命中率 100%。</p>
+            </article>
+
+            <article class="photo-card">
+              <div class="photo-media" style="--photo: url('photo3.jpg')">
+                <img src="photo3.jpg" alt="可可照片三">
+                <div class="photo-fallback">生日滤镜正在上线<br>photo3.jpg</div>
+              </div>
+              <p>高级感不是装出来的，是可可今天自带的生日滤镜。</p>
+            </article>
+          </div>
+        </div>
+        <div class="next-row"><button class="ghost-btn" type="button" data-next>抽取 20 岁 buff 🍓</button></div>
+      </section>
+
+      <section class="scene scene-4" data-scene="3">
+        <div class="sticker" style="left: 26px; top: 92px;">✨</div>
+        <div class="sticker" style="right: 28px; bottom: 104px; animation-delay: -1.2s;">🐾</div>
+        <div class="scene-inner">
+          <article class="glass wish-card">
+            <span class="eyebrow">20岁愿望自动生成器</span>
+            <h2 class="title">今日幸运祝福</h2>
+            <div id="wishDisplay" class="wish-display">准备好接住今日份好运了吗？</div>
+            <button id="wishBtn" class="primary-btn" type="button">点击生成今日幸运祝福</button>
+          </article>
+          <div class="next-row"><button class="ghost-btn" type="button" data-next>收看认真祝福 🌙</button></div>
+        </div>
+      </section>
+
+      <section class="scene scene-5" data-scene="4">
+        <div class="sticker" style="right: 30px; top: 90px;">🌙</div>
+        <div class="scene-inner">
+          <article class="glass blessing-card">
+            <span class="eyebrow">20岁限定祝福</span>
+            <h2 class="title">新阶段，也要按自己的节奏漂亮</h2>
+            <div class="blessing-lines">
+              <p>20岁不是突然变成大人，<br>只是多了一个可以更自由选择自己的年纪。</p>
+              <p>愿可可在新的这一岁，<br>工作少一点疲惫，生活多一点惊喜；</p>
+              <p>猫猫、草莓、漂亮照片和好心情，<br>都能经常出现在你的日常里。</p>
+              <p>峡谷少遇坑，出片多遇光，<br>烦人的事自动静音三秒。</p>
+              <p>今天不用太懂事，今天你最大。</p>
+            </div>
+          </article>
+          <div class="next-row"><button class="ghost-btn" type="button" data-next>进入最终结算 🎁</button></div>
+        </div>
+      </section>
+
+      <section class="scene scene-6" data-scene="5">
+        <div class="sticker" style="left: 30px; top: 108px;">🍰</div>
+        <div class="sticker" style="right: 26px; bottom: 104px; animation-delay: -1s;">🍓</div>
+        <div class="scene-inner">
+          <article class="glass final-card">
+            <span class="eyebrow">Keke Birthday v2.0</span>
+            <h1 class="final-title">小姐，20岁生日快乐。</h1>
+            <div class="final-sub">可可限定版 2.0 已正式上线。</div>
+            <p class="final-copy">愿你漂亮、开心、清醒、自由，<br>也愿你每天都有一点点被生活偏爱的证据。</p>
+            <button id="finishBtn" class="primary-btn" type="button">收下今天的生日 buff</button>
+          </article>
+        </div>
+      </section>
+    </div>
+
+    <div class="progress" id="progress" aria-label="页面进度"></div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </main>
+
+  <div class="modal" id="finalModal" aria-hidden="true">
+    <div class="modal-box" role="dialog" aria-modal="true" aria-label="祝福送达">
+      <h2>哎呦妈呀</h2>
+      <p>祝福已成功送达。<br>今日好运 buff 已到账。</p>
+      <button class="primary-btn" type="button" id="closeModal">完美收下</button>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const scenes = Array.from(document.querySelectorAll(".scene"));
+      const progress = document.getElementById("progress");
+      const toast = document.getElementById("toast");
+      const bgm = document.getElementById("bgm");
+      const musicBtn = document.getElementById("musicBtn");
+      const wishBtn = document.getElementById("wishBtn");
+      const wishDisplay = document.getElementById("wishDisplay");
+      const finalModal = document.getElementById("finalModal");
+      const finishBtn = document.getElementById("finishBtn");
+      const closeModal = document.getElementById("closeModal");
+      let current = 0;
+      let toastTimer = 0;
+      let touchStartY = 0;
+      let touchStartX = 0;
+
+      const wishes = [
+        "猫猫主动贴贴概率 +20%",
+        "草莓自由指数 +100%",
+        "小红书出片率 +99%",
+        "王者排位队友正常率 +50%",
+        "工作摸鱼成功率 +30%",
+        "帅哥刷新概率：正在努力加载中",
+        "今天所有烦人的事自动静音",
+        "哎呦妈呀，好运真的来了"
+      ];
+
+      const particleIcons = ["🍓", "🐾", "✨", "✦", "♡"];
+
+      function showToast(message) {
+        toast.textContent = message;
+        toast.classList.add("show");
+        window.clearTimeout(toastTimer);
+        toastTimer = window.setTimeout(() => toast.classList.remove("show"), 1800);
+      }
+
+      function renderProgress() {
+        progress.innerHTML = scenes.map((_, index) => (
+          `<span class="dot${index === current ? " active" : ""}" aria-hidden="true"></span>`
+        )).join("");
+      }
+
+      function goTo(index) {
+        const target = Math.max(0, Math.min(scenes.length - 1, index));
+        if (target === current) return;
+        scenes[current].classList.remove("active");
+        scenes[current].classList.toggle("exit-up", target > current);
+        current = target;
+        scenes.forEach((scene, i) => {
+          if (i !== current) scene.classList.remove("active");
+          if (i < current) scene.classList.add("exit-up");
+          if (i > current) scene.classList.remove("exit-up");
+        });
+        scenes[current].classList.add("active");
+        renderProgress();
+      }
+
+      function nextScene() {
+        goTo(current + 1);
+      }
+
+      async function tryPlayBgm() {
+        if (!bgm) return false;
+        try {
+          await bgm.play();
+          musicBtn.textContent = "BGM 播放中";
+          musicBtn.setAttribute("aria-label", "暂停背景音乐");
+          return true;
+        } catch (error) {
+          musicBtn.textContent = "BGM 暂未加载";
+          showToast("BGM 暂未加载");
+          return false;
+        }
+      }
+
+      function toggleBgm() {
+        if (!bgm) {
+          showToast("BGM 暂未加载");
+          return;
+        }
+        if (bgm.paused) {
+          tryPlayBgm();
+        } else {
+          bgm.pause();
+          musicBtn.textContent = "BGM 已暂停";
+          musicBtn.setAttribute("aria-label", "播放背景音乐");
+        }
+      }
+
+      function burstAt(x, y) {
+        for (let i = 0; i < 12; i += 1) {
+          const particle = document.createElement("span");
+          const angle = (Math.PI * 2 * i / 12) + (Math.random() * .45);
+          const distance = 42 + Math.random() * 68;
+          particle.className = "particle";
+          particle.textContent = particleIcons[Math.floor(Math.random() * particleIcons.length)];
+          particle.style.left = `${x - 12}px`;
+          particle.style.top = `${y - 12}px`;
+          particle.style.setProperty("--dx", `${Math.cos(angle) * distance}px`);
+          particle.style.setProperty("--dy", `${Math.sin(angle) * distance - 28}px`);
+          particle.style.setProperty("--rot", `${Math.random() * 110 - 55}deg`);
+          document.body.appendChild(particle);
+          window.setTimeout(() => particle.remove(), 860);
+        }
+      }
+
+      document.querySelectorAll("[data-next]").forEach((button) => {
+        button.addEventListener("click", (event) => {
+          if (current === 0) tryPlayBgm();
+          burstAt(event.clientX || window.innerWidth / 2, event.clientY || window.innerHeight / 2);
+          nextScene();
+        });
+      });
+
+      musicBtn.addEventListener("click", toggleBgm);
+
+      bgm.addEventListener("error", () => {
+        musicBtn.textContent = "BGM 暂未加载";
+      });
+
+      bgm.addEventListener("ended", () => {
+        musicBtn.textContent = "BGM 未播放";
+      });
+
+      wishBtn.addEventListener("click", (event) => {
+        const nextWish = wishes[Math.floor(Math.random() * wishes.length)];
+        wishDisplay.textContent = nextWish;
+        wishDisplay.classList.remove("bump");
+        void wishDisplay.offsetWidth;
+        wishDisplay.classList.add("bump");
+        burstAt(event.clientX || window.innerWidth / 2, event.clientY || window.innerHeight / 2);
+      });
+
+      finishBtn.addEventListener("click", (event) => {
+        burstAt(event.clientX || window.innerWidth / 2, event.clientY || window.innerHeight / 2);
+        finalModal.classList.add("show");
+        finalModal.setAttribute("aria-hidden", "false");
+      });
+
+      closeModal.addEventListener("click", () => {
+        finalModal.classList.remove("show");
+        finalModal.setAttribute("aria-hidden", "true");
+      });
+
+      finalModal.addEventListener("click", (event) => {
+        if (event.target === finalModal) {
+          finalModal.classList.remove("show");
+          finalModal.setAttribute("aria-hidden", "true");
+        }
+      });
+
+      document.querySelectorAll(".photo-media img").forEach((img) => {
+        img.addEventListener("error", () => {
+          img.closest(".photo-media").classList.add("is-missing");
+        });
+      });
+
+      document.addEventListener("touchstart", (event) => {
+        const touch = event.touches[0];
+        touchStartY = touch.clientY;
+        touchStartX = touch.clientX;
+      }, { passive: true });
+
+      document.addEventListener("touchend", (event) => {
+        const touch = event.changedTouches[0];
+        const dy = touch.clientY - touchStartY;
+        const dx = touch.clientX - touchStartX;
+        if (Math.abs(dy) > 68 && Math.abs(dy) > Math.abs(dx) * 1.4) {
+          goTo(current + (dy < 0 ? 1 : -1));
+        }
+      }, { passive: true });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "ArrowDown" || event.key === "PageDown" || event.key === " ") goTo(current + 1);
+        if (event.key === "ArrowUp" || event.key === "PageUp") goTo(current - 1);
+        if (event.key === "Escape") {
+          finalModal.classList.remove("show");
+          finalModal.setAttribute("aria-hidden", "true");
+        }
+      });
+
+      renderProgress();
+    }());
+  </script>
+</body>
+</html>
